@@ -19,11 +19,11 @@ module ActionDispatch
       alias inspect to_s
 
       PARAMETERS_KEY = 'action_dispatch.request.path_parameters'
+      mattr_accessor :relative_url_root
 
-      class Dispatcher #:nodoc:
-        def initialize(options={})
-          @defaults = options[:defaults]
-          @glob_param = options.delete(:glob)
+      class Dispatcher < Routing::Endpoint
+        def initialize(defaults)
+          @defaults = defaults
           @controller_class_names = ThreadSafe::Cache.new
         end
 
@@ -646,6 +646,10 @@ module ActionDispatch
 
       def optimize_routes_generation?
         !mounted? && default_url_options.empty?
+      end
+
+      def find_script_name(options)
+        options.delete(:script_name) || relative_url_root || ''
       end
 
       def _generate_prefix(options = {})
