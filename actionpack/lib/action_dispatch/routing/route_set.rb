@@ -21,7 +21,7 @@ module ActionDispatch
       PARAMETERS_KEY = 'action_dispatch.request.path_parameters'
       mattr_accessor :relative_url_root
 
-      class Dispatcher < Routing::Endpoint
+      class Dispatcher
         def initialize(defaults)
           @defaults = defaults
           @controller_class_names = ThreadSafe::Cache.new
